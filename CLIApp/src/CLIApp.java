@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -8,24 +9,20 @@ public class CLIApp {
 		CLIApp app = new CLIApp();
 		app.promptSet("> ");
 		app.addCommand("example", new CLICommandExample());
-		while (app.running == true) {
-			app.inputCommand();
-		}
+		app.promptPrint();
+		app.inputCommand("example hello!");
 	}
 	
-	private String prompt = "";
+	private String prompt;
 	private HashMap<String, CLICommand> commands;
-	private BufferedReader bufferedReader;
 	private boolean running = true;
 	final private String inputExit = "exit";
 	public CLIApp() {
+		prompt = "";
 		commands = new HashMap<String, CLICommand>();
-		bufferedReader = new BufferedReader(
-				new InputStreamReader(System.in));
 	}
-	public void inputCommand() throws IOException {
-		System.out.print(prompt);
-		String[] inputStrings = bufferedReader.readLine().split(" ");
+	public void inputCommand(String input) throws IOException {
+		String[] inputStrings = input.split(" ");
 		if (0 == inputStrings.length) return;
 		if (1 == inputStrings.length && inputStrings[0].equals(inputExit)) {
 			running = false;
@@ -48,5 +45,11 @@ public class CLIApp {
 	}
 	public void promptSet(String prompt) {
 		this.prompt = prompt;
+	}
+	public String promptGet() {
+		return prompt;
+	}
+	public void promptPrint() {
+		System.out.print(prompt);
 	}
 }
