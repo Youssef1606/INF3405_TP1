@@ -13,13 +13,16 @@ public class CLIApp {
 		app.promptPrint();
 		app.inputCommand("example hello!");
 		app.promptPrint();
-		app.inputCommand("mkdir");
+		//app.cdSet("/Your/Current/Directory");
+		//app.inputCommand("mkdir /Your/New/Folder");
 	}
 	private String prompt;
 	private HashMap<String, CLICommand> commands;
 	final private String inputExit = "exit";
+	private String cd;
 	public CLIApp() {
 		prompt = "";
+		cd = "";
 		commands = new HashMap<String, CLICommand>();
 	}
 	public void inputCommand(String input) throws IOException {
@@ -37,7 +40,7 @@ public class CLIApp {
 		String[] args = new String[inputStrings.length - 1];
 		System.arraycopy(inputStrings, 1, args, 0, args.length);
 		command.argsSet(args);
-		command.execute();
+		command.execute(this);
 	}
 	public CLICommand addCommand(String name, CLICommand command) {
 		commands.put(name, command);
@@ -51,5 +54,12 @@ public class CLIApp {
 	}
 	public void promptPrint() {
 		System.out.print(prompt);
+	}
+	public String cdGet() {
+		return cd;
+	}
+	public void cdSet(String cd) {
+		if (cd.charAt(0) != '/') cd = '/' + cd;
+		this.cd = cd;
 	}
 }
