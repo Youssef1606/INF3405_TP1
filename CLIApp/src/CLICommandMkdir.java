@@ -1,7 +1,7 @@
 import java.io.File;
 
 public class CLICommandMkdir extends CLICommand {
-	@Override public void execute(String[] args) {
+	@Override public void execute() {
 	    String directoryName = argGet(0);
 	    if (argIsEmpty(0)) {
 	    	System.out.println("Please specify a directory.");

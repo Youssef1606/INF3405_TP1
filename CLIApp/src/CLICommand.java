@@ -11,5 +11,5 @@ public class CLICommand {
 	public Boolean argIsEmpty(int index) {
 		return argGet(index).equals("");
 	}
-	public void execute(String[] args) {}
+	public void execute() {}
 }

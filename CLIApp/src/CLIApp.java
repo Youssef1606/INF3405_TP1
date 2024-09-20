@@ -37,7 +37,7 @@ public class CLIApp {
 		String[] args = new String[inputStrings.length - 1];
 		System.arraycopy(inputStrings, 1, args, 0, args.length);
 		command.argsSet(args);
-		command.execute(args);
+		command.execute();
 	}
 	public CLICommand addCommand(String name, CLICommand command) {
 		commands.put(name, command);
