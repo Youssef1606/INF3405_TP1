@@ -9,13 +9,14 @@ public class CLIApp {
 		CLIApp app = new CLIApp();
 		app.promptSet("> ");
 		app.addCommand("example", new CLICommandExample());
+		app.addCommand("mkdir", new CLICommandMkdir());
 		app.promptPrint();
 		app.inputCommand("example hello!");
+		app.promptPrint();
+		app.inputCommand("mkdir");
 	}
-	
 	private String prompt;
 	private HashMap<String, CLICommand> commands;
-	private boolean running = true;
 	final private String inputExit = "exit";
 	public CLIApp() {
 		prompt = "";
@@ -25,7 +26,6 @@ public class CLIApp {
 		String[] inputStrings = input.split(" ");
 		if (0 == inputStrings.length) return;
 		if (1 == inputStrings.length && inputStrings[0].equals(inputExit)) {
-			running = false;
 			System.out.println(inputStrings[0]);
 			return;
 		}
@@ -36,7 +36,7 @@ public class CLIApp {
 		}
 		String[] args = new String[inputStrings.length - 1];
 		System.arraycopy(inputStrings, 1, args, 0, args.length);
-		command.args_set(args);
+		command.argsSet(args);
 		command.execute(args);
 	}
 	public CLICommand addCommand(String name, CLICommand command) {

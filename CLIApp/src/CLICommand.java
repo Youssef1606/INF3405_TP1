@@ -1,14 +1,15 @@
 
 public class CLICommand {
-	protected String[] args;
-	protected String arg_get(int index) {
+	private String[] args;
+	protected String argGet(int index) {
 		if (index < args.length) return args[index];
 		return "";
 	}
-	public void args_set(String[] args) {
+	public void argsSet(String[] args) {
 		this.args = args;
 	}
-	public void execute(String[] args) {
-		
+	public Boolean argIsEmpty(int index) {
+		return argGet(index).equals("");
 	}
+	public void execute(String[] args) {}
 }
