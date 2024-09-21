@@ -10,11 +10,15 @@ public class CLIApp {
 		app.promptSet("> ");
 		app.addCommand("example", new CLICommandExample());
 		app.addCommand("mkdir", new CLICommandMkdir());
+		app.addCommand("ls", new CLICommandLs());
 		app.promptPrint();
 		app.inputCommand("example hello!");
 		app.promptPrint();
-		//app.cdSet("/Your/Current/Directory");
-		//app.inputCommand("mkdir /Your/New/Folder");
+		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test"); // test avec le chemin de bastien
+		//app.inputCommand("mkdir marche");
+		//app.inputCommand("ls");
+		app.promptPrint();
+		app.inputCommand("example hello!");
 	}
 	private String prompt;
 	private HashMap<String, CLICommand> commands;

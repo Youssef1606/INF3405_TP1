@@ -53,7 +53,8 @@ public class ClientHandler extends Thread {
 
 			
 			Message_From_Client = in.readUTF();
-			out.writeUTF("message reçus : "+Message_From_Client );
+			
+			out.writeUTF("message reçus : "+ Message_From_Client );
 			
 			//executer des méthodes avec la commande reçue et envoyé un message au client pour lui dire quoi faire
 			// A SUPPR => Afficher les infos du clients comme sur le tp 
