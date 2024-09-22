@@ -19,10 +19,10 @@ public class CLIApp {
 	final private String inputExit = "exit";
 	public CLIApp() {
 		commands = new HashMap<String, CLICommand>();
-		app.promptSet("> ");
-		app.addCommand("example", new CLICommandExample());
-		app.addCommand("mkdir", new CLICommandMkdir());
-		app.addCommand("ls", new CLICommandLs());
+		this.promptSet("> ");
+		this.addCommand("example", new CLICommandExample());
+		this.addCommand("mkdir", new CLICommandMkdir());
+		this.addCommand("ls", new CLICommandLs());
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
