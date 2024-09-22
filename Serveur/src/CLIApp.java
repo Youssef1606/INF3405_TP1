@@ -29,22 +29,20 @@ public class CLIApp {
 		cd = "";
 		commands = new HashMap<String, CLICommand>();
 	}
-	public void inputCommand(String input) throws IOException {
+	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
 		if (0 == inputStrings.length) return;
 		if (1 == inputStrings.length && inputStrings[0].equals(inputExit)) {
-			System.out.println(inputStrings[0]);
-			return;
+			return inputStrings[0];
 		}
 		CLICommand command = commands.get(inputStrings[0]);
 		if (null == command) {
-			System.out.println(inputStrings[0] + ": no such command.");
-			return;
+			return inputStrings[0] + ": no such command.";
 		}
 		String[] args = new String[inputStrings.length - 1];
 		System.arraycopy(inputStrings, 1, args, 0, args.length);
 		command.argsSet(args);
-		command.execute(this);
+		return command.execute(this);
 	}
 	public CLICommand addCommand(String name, CLICommand command) {
 		commands.put(name, command);

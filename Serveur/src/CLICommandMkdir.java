@@ -1,10 +1,9 @@
 import java.io.File;
 
 public class CLICommandMkdir extends CLICommand {
-	@Override public void execute(CLIApp app) {
+	@Override public String execute(CLIApp app) {
 	    if (argIsEmpty(0)) {
-	    	System.out.println("Please specify a directory.");
-	    	return;
+	    	return "Please specify a directory.";
 	    }
 	    String directoryName = argGet(0);
 	    if (directoryName.charAt(0) != '/') directoryName = "/" + directoryName;
@@ -15,6 +14,7 @@ public class CLICommandMkdir extends CLICommand {
 	        directory.mkdirs();
 	    }
 	    // fin du code tiré de [1]
-	    else System.out.println("Directory " + fullDirectoryName + " already exists.");
+	    else return "Directory " + fullDirectoryName + " already exists.";
+	    return "";
 	}
 }
