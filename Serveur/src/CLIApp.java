@@ -7,27 +7,22 @@ import java.io.InputStreamReader;
 public class CLIApp {
 	public static void main(String[] args) throws IOException {
 		CLIApp app = new CLIApp();
-		app.promptSet("> ");
-		app.addCommand("example", new CLICommandExample());
-		app.addCommand("mkdir", new CLICommandMkdir());
-		app.addCommand("ls", new CLICommandLs());
-		app.promptPrint();
-		app.inputCommand("example hello!");
-		app.promptPrint();
 		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test"); // test avec le chemin de bastien
 		//app.inputCommand("mkdir marche");
 		//app.inputCommand("ls");
 		app.promptPrint();
 		app.inputCommand("example hello!");
 	}
-	private String prompt;
+	private String prompt = "";
+	private String cd = "";
 	private HashMap<String, CLICommand> commands;
 	final private String inputExit = "exit";
-	private String cd;
 	public CLIApp() {
-		prompt = "";
-		cd = "";
 		commands = new HashMap<String, CLICommand>();
+		app.promptSet("> ");
+		app.addCommand("example", new CLICommandExample());
+		app.addCommand("mkdir", new CLICommandMkdir());
+		app.addCommand("ls", new CLICommandLs());
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
