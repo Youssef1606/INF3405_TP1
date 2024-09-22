@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+
 public class ClientHandler extends Thread {
 	private int Client;
 	private Socket socket;
@@ -48,11 +49,11 @@ public class ClientHandler extends Thread {
 		String Message_To_Client = "";
 		
 		
-		
 		while(!Message_From_Client.equals("quit")) {
 
 			
 			Message_From_Client = in.readUTF();
+			/// Affichage comme dans le TP
 			
 			out.writeUTF("message reçus : "+ Message_From_Client );
 			
