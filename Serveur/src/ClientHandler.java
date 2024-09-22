@@ -47,6 +47,7 @@ public class ClientHandler extends Thread {
 		// fonction qui recois les commande du client et lance les procédure nécessaire
 		String Message_From_Client = "";
 		String Message_To_Client = "";
+		CLIApp app = new CLIApp();
 		
 		
 		while(!Message_From_Client.equals("quit")) {
@@ -54,8 +55,11 @@ public class ClientHandler extends Thread {
 			
 			Message_From_Client = in.readUTF();
 			/// Affichage comme dans le TP
+			out.writeUTF(app.promptGet());
+			Message_From_Client = in.readUTF();
+			app.inputCommand(Message_To_Client);
 			
-			out.writeUTF("message reçus : "+ Message_From_Client );
+			
 			
 			//executer des méthodes avec la commande reçue et envoyé un message au client pour lui dire quoi faire
 			// A SUPPR => Afficher les infos du clients comme sur le tp 
