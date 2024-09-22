@@ -8,17 +8,22 @@ public class CLICommandLs extends CLICommand{
 	
 	@Override public String execute(CLIApp app) {
 		File repertory = new File(app.cdGet());
-		File[] files = repertory.listFiles();
 		String result = "";
-		for(int i = 0; i < files.length ; i++) {
-			if (files[i].isFile()) {
-				result += ANSI_BLUE + files[i].getName() + ANSI_RESET + "\n";
-			}
-			else if(files[i].isDirectory()){
-				result += ANSI_GREEN + files[i].getName() + ANSI_RESET + "\n";
+		if (repertory.isDirectory()) {
+			File[] files = repertory.listFiles();
+			
+			for(int i = 0; i < files.length ; i++) {
+				if (files[i].isFile()) {
+					result += ANSI_BLUE + files[i].getName() + ANSI_RESET + "\n";
+				}
+				else if(files[i].isDirectory()){
+					result += ANSI_GREEN + files[i].getName() + ANSI_RESET + "\n";
+				}
 			}
 		}
-	
+		else {
+			result = "Vous ne vous trouvez pas dans un repertoire";
+		}
 		return result;
 	}
 }

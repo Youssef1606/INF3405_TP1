@@ -46,20 +46,22 @@ public class Client {
 	public static void Run(Socket socket) throws IOException {
 		String Message_To_Serv = ""; //message a envoyé au serveur
 		String Message_From_Serv=""; //message reçue par le serveur
-		
+		String Prompt = "";
 		//Méthode qui envoie et gères les actions que veut effectuer le client
 		// Pour cela, le client envoie un message au serveur et le serveur enverra en retour un message au client lui indiquant quel méthode utiliser
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream()); //création canal d'envoie 
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		Scanner scan = new Scanner(System.in);
 		while(!Message_To_Serv.equals("quit")) {
-			//Envoie de message au serveur
-			System.out.println("Envoyé une commande au serveur :");
+			//recevoir prompt du serveur
+			Prompt = in.readUTF();
+			System.out.print(Prompt);
 			Message_To_Serv = scan.nextLine();
 			out.writeUTF(Message_To_Serv);
 			//Attente de la réponse du serveur
 			Message_From_Serv = in.readUTF();
-			Execute_Commande(Message_From_Serv);
+			System.out.println(Message_From_Serv);
+			
 		}
 		scan.close();
 		socket.close();

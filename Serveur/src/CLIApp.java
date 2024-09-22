@@ -23,6 +23,7 @@ public class CLIApp {
 		this.addCommand("example", new CLICommandExample());
 		this.addCommand("mkdir", new CLICommandMkdir());
 		this.addCommand("ls", new CLICommandLs());
+		
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");

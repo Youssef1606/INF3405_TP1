@@ -48,16 +48,18 @@ public class ClientHandler extends Thread {
 		String Message_From_Client = "";
 		String Message_To_Client = "";
 		CLIApp app = new CLIApp();
+		app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
 		
 		
 		while(!Message_From_Client.equals("quit")) {
 
 			
-			Message_From_Client = in.readUTF();
+			
 			/// Affichage comme dans le TP
 			out.writeUTF(app.promptGet());
 			Message_From_Client = in.readUTF();
-			app.inputCommand(Message_To_Client);
+			System.out.println(Message_From_Client);
+			out.writeUTF(app.inputCommand(Message_From_Client));
 			
 			
 			
