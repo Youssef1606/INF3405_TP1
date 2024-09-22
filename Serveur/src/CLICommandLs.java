@@ -19,6 +19,6 @@ public class CLICommandLs extends CLICommand{
 			}
 		}
 	
-	
+		return result;
 	}
 }
