@@ -31,7 +31,7 @@ public class CLIApp {
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
-		if (0 == inputStrings.length) return;
+		if (0 == inputStrings.length) return "";
 		if (1 == inputStrings.length && inputStrings[0].equals(inputExit)) {
 			return inputStrings[0];
 		}

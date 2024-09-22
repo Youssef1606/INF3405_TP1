@@ -11,5 +11,7 @@ public class CLICommand {
 	public Boolean argIsEmpty(int index) {
 		return argGet(index).equals("");
 	}
-	public String execute(CLIApp app) {}
+	public String execute(CLIApp app) {
+		return "";
+	}
 }
