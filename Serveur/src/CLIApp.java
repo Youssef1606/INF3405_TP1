@@ -30,8 +30,9 @@ public class CLIApp {
 		this.addCommand("mkdir", new CLICommandMkdir());
 		this.addCommand("ls", new CLICommandLs());
 		this.addCommand("cd", new CLICommandCd());
-                this.cdSet(System.getProperty("user.dir"));
-		
+		this.addCommand("upload", new CLICommandUpload());
+		this.addCommand("download", new CLICommandDownload());
+        this.cdSet(System.getProperty("user.dir"));
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
