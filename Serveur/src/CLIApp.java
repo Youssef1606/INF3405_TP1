@@ -23,6 +23,8 @@ public class CLIApp {
 		this.addCommand("example", new CLICommandExample());
 		this.addCommand("mkdir", new CLICommandMkdir());
 		this.addCommand("ls", new CLICommandLs());
+		this.addCommand("cd", new CLICommandCd());
+                this.cdSet(System.getProperty("user.dir"));
 		
 	}
 	public String inputCommand(String input) throws IOException {
@@ -48,7 +50,7 @@ public class CLIApp {
 		this.prompt = prompt;
 	}
 	public String promptGet() {
-		return prompt;
+		return cd + "> ";
 	}
 	public void promptPrint() {
 		System.out.print(prompt);
@@ -57,7 +59,6 @@ public class CLIApp {
 		return cd;
 	}
 	public void cdSet(String cd) {
-		if (cd.charAt(0) != '/') cd = '/' + cd;
 		this.cd = cd;
 	}
 }
