@@ -1,8 +1,14 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
@@ -57,16 +63,64 @@ public class Client {
 			Prompt = in.readUTF();
 			System.out.print(Prompt);
 			Message_To_Serv = scan.nextLine();
-			out.writeUTF(Message_To_Serv);
-			//Attente de la réponse du serveur
-			Message_From_Serv = in.readUTF();
-			System.out.println(Message_From_Serv);
-			
+			if(Message_To_Serv.startsWith("upload")) {
+				UploadCommand(Message_To_Serv,out,in);
+			}else if(Message_To_Serv.startsWith("download")) {
+				DownloadCommand();
+			}
+			else {
+				out.writeUTF(Message_To_Serv);
+				//Attente de la réponse du serveur
+				Message_From_Serv = in.readUTF();
+				System.out.println(Message_From_Serv);
+			}
 		}
 		scan.close();
 		socket.close();
 	}
 	
+	
+	private static void DownloadCommand() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
+		String[] Tab_Message = Message.split(" ",2);
+		if(Tab_Message.length != 2) {
+			System.out.println("Pas le bon nombre d'argument \n Entrez la commande et le chemins absolue du fichier");
+		}
+		else {
+			String Name_File = Tab_Message[1];
+			File file = new File(Name_File);
+			if (!file.isFile()) {
+				System.out.println("Le fichier rentrer n'est pas valide");
+			}
+			else {
+				out.writeUTF("upload "+ file.getName());
+				if(in.readUTF() == "ok") {
+					sendFile(file,out);
+				}
+				
+			}
+		}
+		
+		
+	}
+	
+	private static void sendFile(File file,DataOutputStream out) throws FileNotFoundException, IOException {
+		try (FileInputStream fileIn = new FileInputStream(file)) {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = fileIn.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+        }
+		
+	}
+
+
 	public static void Execute_Commande(String Commande) {
 		System.out.println(Commande); //Test pour le developement si le serveur comunique
 	}
