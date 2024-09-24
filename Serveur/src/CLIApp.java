@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class CLIApp {
 	public static void main(String[] args) throws IOException {
@@ -15,17 +17,22 @@ public class CLIApp {
 	}
 	private String prompt = "";
 	private String cd = "";
+	private DataInputStream in;
+	private DataOutputStream out;
 	private HashMap<String, CLICommand> commands;
 	final private String inputExit = "exit";
-	public CLIApp() {
+	public CLIApp(DataInputStream in, DataOutputStream out) {
+		this.in = in;
+		this.out = out;
 		commands = new HashMap<String, CLICommand>();
 		this.promptSet("> ");
 		this.addCommand("example", new CLICommandExample());
 		this.addCommand("mkdir", new CLICommandMkdir());
 		this.addCommand("ls", new CLICommandLs());
 		this.addCommand("cd", new CLICommandCd());
-                this.cdSet(System.getProperty("user.dir"));
-		
+		this.addCommand("upload", new CLICommandUpload());
+		this.addCommand("download", new CLICommandDownload());
+        this.cdSet(System.getProperty("user.dir"));
 	}
 	public String inputCommand(String input) throws IOException {
 		String[] inputStrings = input.split(" ");
