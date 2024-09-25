@@ -8,12 +8,12 @@ import java.io.DataOutputStream;
 
 public class CLIApp {
 	public static void main(String[] args) throws IOException {
-		CLIApp app = new CLIApp();
+		//CLIApp app = new CLIApp();
 		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test"); // test avec le chemin de bastien
 		//app.inputCommand("mkdir marche");
 		//app.inputCommand("ls");
-		app.promptPrint();
-		app.inputCommand("example hello!");
+		//app.promptPrint();
+		//app.inputCommand("example hello!");
 	}
 	private String prompt = "";
 	private String cd = "";
@@ -31,7 +31,7 @@ public class CLIApp {
 		this.addCommand("ls", new CLICommandLs());
 		this.addCommand("cd", new CLICommandCd());
 		this.addCommand("upload", new CLICommandUpload());
-		this.addCommand("download", new CLICommandDownload());
+		//this.addCommand("download", new CLICommandDownload());
         this.cdSet(System.getProperty("user.dir"));
 	}
 	public String inputCommand(String input) throws IOException {
@@ -67,5 +67,11 @@ public class CLIApp {
 	}
 	public void cdSet(String cd) {
 		this.cd = cd;
+	}
+	public DataInputStream getIn() {
+		return this.in;
+	}
+	public DataOutputStream getOut() {
+		return this.out;
 	}
 }

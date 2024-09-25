@@ -65,6 +65,8 @@ public class Client {
 			Message_To_Serv = scan.nextLine();
 			if(Message_To_Serv.startsWith("upload")) {
 				UploadCommand(Message_To_Serv,out,in);
+				Message_From_Serv = in.readUTF();
+				System.out.println(Message_From_Serv);
 			}else if(Message_To_Serv.startsWith("download")) {
 				DownloadCommand();
 			}
@@ -94,12 +96,15 @@ public class Client {
 		else {
 			String Name_File = Tab_Message[1];
 			File file = new File(Name_File);
+			
 			if (!file.isFile()) {
 				System.out.println("Le fichier rentrer n'est pas valide");
 			}
 			else {
 				out.writeUTF("upload "+ file.getName());
+												//+ (String) file.length());
 				if(in.readUTF() == "ok") {
+					out.writeLong(file.length());
 					sendFile(file,out);
 				}
 				

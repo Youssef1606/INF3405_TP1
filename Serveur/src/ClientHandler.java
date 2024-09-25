@@ -47,7 +47,7 @@ public class ClientHandler extends Thread {
 		// fonction qui recois les commande du client et lance les procédure nécessaire
 		String Message_From_Client = "";
 		String Message_To_Client = "";
-		CLIApp app = new CLIApp();
+		CLIApp app = new CLIApp(in,out);
 		app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
 		
 		
