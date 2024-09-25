@@ -63,12 +63,14 @@ public class Client {
 			Prompt = in.readUTF();
 			System.out.print(Prompt);
 			Message_To_Serv = scan.nextLine();
+			
 			if(Message_To_Serv.startsWith("upload")) {
-				UploadCommand(Message_To_Serv,out,in);
+				UploadCommand(Message_To_Serv, out, in);
 				Message_From_Serv = in.readUTF();
 				System.out.println(Message_From_Serv);
-			}else if(Message_To_Serv.startsWith("download")) {
-				DownloadCommand();
+			}
+			else if(Message_To_Serv.startsWith("download")) {
+				DownloadCommand(Message_To_Serv, out, in);
 			}
 			else {
 				out.writeUTF(Message_To_Serv);
@@ -81,40 +83,51 @@ public class Client {
 		socket.close();
 	}
 	
-	
-	private static void DownloadCommand() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
+	private static void DownloadCommand(String Message,DataOutputStream out, DataInputStream in) {
 		String[] Tab_Message = Message.split(" ",2);
 		if(Tab_Message.length != 2) {
-			System.out.println("Pas le bon nombre d'argument \n Entrez la commande et le chemins absolue du fichier");
+			System.out.println("Pas le bon nombre d'argument.\nEntrez la commande et le chemin absolu du fichier");
 		}
 		else {
 			String Name_File = Tab_Message[1];
 			File file = new File(Name_File);
 			
 			if (!file.isFile()) {
-				System.out.println("Le fichier rentrer n'est pas valide");
+				System.out.println("Le fichier entré n'est pas valide.");
+			}
+			else {
+				out.writeUTF("download "+ file.getName());
+				if(in.readUTF() == "ok") {
+					receiveFile(file, in);
+				}
+			}
+		}
+	}
+
+
+	public static void UploadCommand(String Message,DataOutputStream out, DataInputStream in) throws IOException {
+		String[] Tab_Message = Message.split(" ",2);
+		if(Tab_Message.length != 2) {
+			System.out.println("Pas le bon nombre d'argument.\nEntrez la commande et le chemin absolu du fichier");
+		}
+		else {
+			String Name_File = Tab_Message[1];
+			File file = new File(Name_File);
+			
+			if (!file.isFile()) {
+				System.out.println("Le fichier entré n'est pas valide.");
 			}
 			else {
 				out.writeUTF("upload "+ file.getName());
-												//+ (String) file.length());
 				if(in.readUTF() == "ok") {
 					out.writeLong(file.length());
 					sendFile(file,out);
 				}
-				
 			}
 		}
-		
-		
 	}
 	
-	private static void sendFile(File file,DataOutputStream out) throws FileNotFoundException, IOException {
+	private static void sendFile(File file, DataOutputStream out) throws FileNotFoundException, IOException {
 		try (FileInputStream fileIn = new FileInputStream(file)) {
             byte[] buffer = new byte[4096];
             int bytesRead;
@@ -122,10 +135,13 @@ public class Client {
                 out.write(buffer, 0, bytesRead);
             }
         }
-		
 	}
-
-
+	
+	private static void receiveFile(File file, DataInputStream in) throws FileNotFoundException, IOException {
+		// TODO
+		// on entre les données reçues à l'intérieur d'un fichier
+	}
+	
 	public static void Execute_Commande(String Commande) {
 		System.out.println(Commande); //Test pour le developement si le serveur comunique
 	}
