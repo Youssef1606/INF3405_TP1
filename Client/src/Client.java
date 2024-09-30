@@ -90,26 +90,22 @@ public class Client {
 
 	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
 		String[] Tab_Message = Message.split(" ",2);
-		if(Tab_Message.length != 2) {
-			System.out.println("Pas le bon nombre d'argument \n Entrez la commande et le chemins absolue du fichier");
+		
+		String Name_File = Tab_Message[1];
+		File file = new File(Name_File);
+		
+		if (!file.isFile()) {
+			System.out.println("Le fichier rentrer n'est pas valide");
 		}
 		else {
-			String Name_File = Tab_Message[1];
-			File file = new File(Name_File);
+			out.writeUTF("upload "+ file.getName());
+											
+			out.writeLong(file.length());
+			sendFile(file,out);
 			
-			if (!file.isFile()) {
-				System.out.println("Le fichier rentrer n'est pas valide");
-			}
-			else {
-				out.writeUTF("upload "+ file.getName());
-												//+ (String) file.length());
-				if(in.readUTF() == "ok") {
-					out.writeLong(file.length());
-					sendFile(file,out);
-				}
-				
-			}
+			
 		}
+		
 		
 		
 	}

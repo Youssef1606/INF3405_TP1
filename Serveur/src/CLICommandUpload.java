@@ -10,17 +10,16 @@ public class CLICommandUpload extends CLICommand {
 		
 		//Etape 1 : verifier si on peut récuperer
 		try {
-			System.out.println("wesh");
-			File Nvfile = new File(app.cdGet() + fileName);
 			
-			app.getOut().writeUTF("ok");
-			
+			File Nvfile = new File(app.cdGet() + "\\" + fileName);
+			System.out.println(app.cdGet()+ "\\" + fileName);
 			Long fileSize = app.getIn().readLong();
 			
 			try (FileOutputStream fileOut = new FileOutputStream(Nvfile)) {
 	            byte[] buffer = new byte[4096];
 	            long bytesReceived = 0;
 	            int bytesRead;
+	            
 	            while (bytesReceived < fileSize && (bytesRead = app.getIn().read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
 	                fileOut.write(buffer, 0, bytesRead);
 	                bytesReceived += bytesRead;
