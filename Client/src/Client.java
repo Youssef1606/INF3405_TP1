@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -85,36 +86,23 @@ public class Client {
 	
 	private static void DownloadCommand(String Message,DataOutputStream out, DataInputStream in) {
 		String[] Tab_Message = Message.split(" ",2);
-
 		
 		String Name_File = Tab_Message[1];
 		File file = new File(Name_File);
 		
-		if (!file.isFile()) {
+		// TODO : Vérifier que le fichier entré existe dans le Serveur
+		
+		if (!file.isFile())
 			System.out.println("Le fichier rentrer n'est pas valide");
-		if(Tab_Message.length != 2) {
+		else if(Tab_Message.length != 2) {
 			System.out.println("Pas le bon nombre d'argument.\nEntrez la commande et le chemin absolu du fichier");
-
 		}
 		else {
-			//out.writeUTF("upload "+ file.getName());
-											
-			//out.writeLong(file.length());
-			//sendFile(file,out);
-			
-
-			if (!file.isFile()) {
-				System.out.println("Le fichier entré n'est pas valide.");
-			}
-			else {
-				//out.writeUTF("download "+ file.getName());
-				//if(in.readUTF() == "ok") {
-				//	receiveFile(file, in);
-				}
-			}
+			out.writeUTF("download "+ file.getName());
+			if (in.readUTF() == "ok")
+				receiveFile(file, in);
 		}
-		}
-	//}
+	}
 	
 
 
@@ -128,11 +116,9 @@ public class Client {
 			System.out.println("Le fichier rentrer n'est pas valide");
 		}
 		else {
-			out.writeUTF("upload "+ file.getName());
-											
+			out.writeUTF("upload "+ file.getName());	
 			out.writeLong(file.length());
 			sendFile(file,out);
-				
 		}
 		
 	}
@@ -148,8 +134,14 @@ public class Client {
 	}
 	
 	private static void receiveFile(File file, DataInputStream in) throws FileNotFoundException, IOException {
-		// TODO
-		// on entre les données reçues à l'intérieur d'un fichier
+		try (FileOutputStream fileOut = new FileOutputStream(file)) {
+			// long fileLength = in.readLong(); // TODO utiliser longueur du fichier
+			byte[] buffer = new byte[4096];
+			int bytesRead;
+			while ((bytesRead = in.read(buffer)) != -1) {
+				fileOut.write(buffer, 0, bytesRead); // on écrit les bytes reçus dans le fichier
+			}
+		}
 	}
 	
 	public static void Execute_Commande(String Commande) {

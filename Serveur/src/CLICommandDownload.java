@@ -5,7 +5,8 @@ import java.io.IOException;
 public class CLICommandDownload extends CLICommand {
 	public String execute(CLIApp app) {
 		String relativeFilePath = argGet(0);
-		File downloadedFile = new File(app.cdGet() + relativeFilePath);
+		String absoluteFilePath = app.cdGet() + "\\" + relativeFilePath
+		File downloadedFile = new File(absoluteFilePath);
 		// lire la longueur du fichier et la stocker dans une variable
 		Long fileSize = app.getIn().readLong();
 		// reçevoir les données du fichier dans un tampon
