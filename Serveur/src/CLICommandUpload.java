@@ -25,15 +25,10 @@ public class CLICommandUpload extends CLICommand {
 	                bytesReceived += bytesRead;
 	            }
 	        }
-			
-			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		return "Upload réussi !";
 	}
 }

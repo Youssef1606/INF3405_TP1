@@ -3,7 +3,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-
 public class ClientHandler extends Thread {
 	private int Client;
 	private Socket socket;
@@ -12,7 +11,6 @@ public class ClientHandler extends Thread {
 		this.Client = Nb_Client;
 		this.socket = socket;
 	}
-	
 	
 	//override
 	public void run() {
@@ -64,9 +62,7 @@ public class ClientHandler extends Thread {
 			
 			
 			//executer des méthodes avec la commande reçue et envoyé un message au client pour lui dire quoi faire
-			// A SUPPR => Afficher les infos du clients comme sur le tp 
-			
-		
+			// A SUPPR => Afficher les infos du clients comme sur le tp
 		}
 	}
 }
