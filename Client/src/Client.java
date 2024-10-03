@@ -84,7 +84,7 @@ public class Client {
 		socket.close();
 	}
 	
-	private static void DownloadCommand(String Message,DataOutputStream out, DataInputStream in) {
+	private static void DownloadCommand(String Message,DataOutputStream out, DataInputStream in) throws IOException {
 		String[] Tab_Message = Message.split(" ",2);
 		
 		String Name_File = Tab_Message[1];

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class CLICommandUpload extends CLICommand {
 	@Override public String execute(CLIApp app) {
-		String fileName = argGet(0);
+		String fileName = argsGet();
 		//Integer fileLength = ToInteger(argGet(1));
 		// reconstituer le fichier à partir d'octets
 		

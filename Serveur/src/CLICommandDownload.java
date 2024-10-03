@@ -3,20 +3,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CLICommandDownload extends CLICommand {
-	public String execute(CLIApp app) {
+	public String execute(CLIApp app) throws IOException {
 		String relativeFilePath = argGet(0);
-		String absoluteFilePath = app.cdGet() + "\\" + relativeFilePath
-		File downloadedFile = new File(absoluteFilePath);
+		
+		File downloadedFile = new File(app.cdGet() + "\\" + relativeFilePath);
 		// lire la longueur du fichier et la stocker dans une variable
 		Long fileSize = app.getIn().readLong();
 		// reçevoir les données du fichier dans un tampon
-		try (FileOutputStream fileOut = new FileOutputStream(Nvfile)) {
+		try (FileOutputStream fileOut = new FileOutputStream(downloadedFile)) {
             byte[] buffer = new byte[4096];
             long bytesReceived = 0;
             int bytesRead;
             // lire le tampon jusqu'à atteindre le nombre d'octets désiré
             while (bytesReceived < fileSize && (bytesRead = app.getIn().read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
-            	downloadedFile.write(buffer, 0, bytesRead);
+            	fileOut.write(buffer, 0, bytesRead);
                 bytesReceived += bytesRead;
             }
         }
