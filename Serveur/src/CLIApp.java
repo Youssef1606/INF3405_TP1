@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
@@ -35,18 +36,20 @@ public class CLIApp {
         this.cdSet(System.getProperty("user.dir"));
 	}
 	public String inputCommand(String input) throws IOException {
-		String[] inputStrings = input.split(" ");
+		List<String> inputStrings = new ArrayList<String>();
+		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
+		while (m.find())
+		    list.add(m.group(1));
+		
 		if (0 == inputStrings.length) return "";
-		if (1 == inputStrings.length && inputStrings[0].equals(inputExit)) {
-			return inputStrings[0];
+		if (1 == inputStrings.length && inputStrings.get(0).equals(inputExit)) {
+			return inputStrings.get(0);
 		}
-		CLICommand command = commands.get(inputStrings[0]);
+		CLICommand command = commands.get(inputStrings.get(0));
 		if (null == command) {
-			return inputStrings[0] + ": no such command.";
+			return inputStrings.get(0) + ": no such command.";
 		}
-		String[] args = new String[inputStrings.length - 1];
-		System.arraycopy(inputStrings, 1, args, 0, args.length);
-		command.argsSet(args);
+		command.argsSet(inputStrings.remove());
 		return command.execute(this);
 	}
 	public CLICommand addCommand(String name, CLICommand command) {

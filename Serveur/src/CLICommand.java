@@ -3,7 +3,7 @@ import java.io.IOException;
 public class CLICommand {
 	private String[] args;
 	protected String argGet(int index) {
-		if (index < args.length) return args[index];
+		if (index < args.length) return args.getItem(index);
 		return "";
 	}
 	public void argsSet(String[] args) {
@@ -15,12 +15,7 @@ public class CLICommand {
 	public String execute(CLIApp app) throws IOException {
 		return "";
 	}
-	
-	protected String[] argsGet() {
-		
+	protected ArrayList<String> argsGet() {
 		return this.args;
 	}
-	
-	
-	
 }
