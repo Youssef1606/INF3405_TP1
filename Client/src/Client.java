@@ -1,5 +1,3 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
@@ -84,36 +82,31 @@ public class Client {
 		socket.close();
 	}
 	
-	private static void DownloadCommand(String Message,DataOutputStream out, DataInputStream in) throws IOException {
-		String[] Tab_Message = Message.split(" ",2);
+	private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
+		ArrayList<String> Tab_Message = CLIApp.argsExtract(Message);
 		
-		String Name_File = Tab_Message[1];
+		String Name_File = Tab_Message.get(1);
 		File file = new File(Name_File);
-		
-		// TODO : Vérifier que le fichier entré existe dans le Serveur
-		
-		if (!file.isFile())
-			System.out.println("Le fichier rentrer n'est pas valide");
-		else if(Tab_Message.length != 2) {
-			System.out.println("Pas le bon nombre d'argument.\nEntrez la commande et le chemin absolu du fichier");
+
+		if (!file.isFile()) {
+			System.out.println("Le fichier entré n'est pas valide.");
 		}
 		else {
 			out.writeUTF("download "+ file.getName());
-			if (in.readUTF() == "ok")
-				receiveFile(file, in);
+			receiveFile(file, in);
 		}
 	}
 	
 
 
 	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
-		String[] Tab_Message = Message.split(" ",2);
+		ArrayList<String> Tab_Message = CLIApp.argsExtract(Message);
 		
-		String Name_File = Tab_Message[1];
+		String Name_File = Tab_Message.get(1);
 		File file = new File(Name_File);
 		
 		if (!file.isFile()) {
-			System.out.println("Le fichier rentrer n'est pas valide");
+			System.out.println("Le fichier entré n'est pas valide.");
 		}
 		else {
 			out.writeUTF("upload \""+ file.getName() + "\"");	

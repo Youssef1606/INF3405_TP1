@@ -35,12 +35,12 @@ public class CLIApp {
 		//this.addCommand("download", new CLICommandDownload());
         this.cdSet(System.getProperty("user.dir"));
 	}
-	public String inputCommand(String input) throws IOException {
+	public static ArrayList<String> argsExtract(String input) {
 		ArrayList<String> inputStrings = new ArrayList<String>();
-		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
-		while (m.find())
-		    inputStrings.add(m.group(1));
-		
+		Matcher matcher = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
+		while (matcher.find())
+		    inputStrings.add(matcher.group(1));
+
 		for (int i = 0; i < inputStrings.size(); i++) {
 			String arg = inputStrings.get(i);
 			if (arg.charAt(0) == '\"' && 
@@ -48,6 +48,10 @@ public class CLIApp {
 					inputStrings.set(i, arg.substring(1, arg.length() - 1));
 		}
 		
+		return inputStrings;
+	}
+	public String inputCommand(String input) throws IOException {
+		ArrayList<String> inputStrings = argsExtract(input);
 		if (0 == inputStrings.size()) return "";
 		if (1 == inputStrings.size() && inputStrings.get(0).equals(inputExit)) {
 			return inputStrings.get(0);
