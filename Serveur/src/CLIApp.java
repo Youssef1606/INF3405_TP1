@@ -2,17 +2,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.awt.List;
-import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 public class CLIApp {
 	public static void main(String[] args) throws IOException {
-		//CLIApp app = new CLIApp();
+		//CLIApp app = new CLIApp(null, null);
+		//System.out.println(app.inputCommand("example \"hey everyone!\""));
 		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test"); // test avec le chemin de bastien
 		//app.inputCommand("mkdir marche");
 		//app.inputCommand("ls");
@@ -44,6 +41,13 @@ public class CLIApp {
 		while (m.find())
 		    inputStrings.add(m.group(1));
 		
+		for (int i = 0; i < inputStrings.size(); i++) {
+			String arg = inputStrings.get(i);
+			if (arg.charAt(0) == '\"' && 
+				arg.charAt(arg.length() - 1) == '\"')
+					inputStrings.set(i, arg.substring(1, arg.length() - 1));
+		}
+		
 		if (0 == inputStrings.size()) return "";
 		if (1 == inputStrings.size() && inputStrings.get(0).equals(inputExit)) {
 			return inputStrings.get(0);
@@ -52,7 +56,9 @@ public class CLIApp {
 		if (null == command) {
 			return inputStrings.get(0) + ": no such command.";
 		}
-		inputStrings.removeFirst();
+
+		inputStrings.remove(0);
+
 		command.argsSet(inputStrings);
 		return command.execute(this);
 	}
