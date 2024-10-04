@@ -116,7 +116,7 @@ public class Client {
 			System.out.println("Le fichier rentrer n'est pas valide");
 		}
 		else {
-			out.writeUTF("upload "+ file.getName());	
+			out.writeUTF("upload \""+ file.getName() + "\"");	
 			out.writeLong(file.length());
 			sendFile(file,out);
 		}

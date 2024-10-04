@@ -1,12 +1,13 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CLICommand {
-	private String[] args;
+	private ArrayList<String> args;
 	protected String argGet(int index) {
-		if (index < args.length) return args.getItem(index);
+		if (index < args.size()) return args.get(index);
 		return "";
 	}
-	public void argsSet(String[] args) {
+	public void argsSet(ArrayList<String> args) {
 		this.args = args;
 	}
 	public Boolean argIsEmpty(int index) {

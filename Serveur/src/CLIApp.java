@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.List;
 import java.io.BufferedReader;
 import java.io.Console;
@@ -36,20 +39,21 @@ public class CLIApp {
         this.cdSet(System.getProperty("user.dir"));
 	}
 	public String inputCommand(String input) throws IOException {
-		List<String> inputStrings = new ArrayList<String>();
+		ArrayList<String> inputStrings = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
 		while (m.find())
-		    list.add(m.group(1));
+		    inputStrings.add(m.group(1));
 		
-		if (0 == inputStrings.length) return "";
-		if (1 == inputStrings.length && inputStrings.get(0).equals(inputExit)) {
+		if (0 == inputStrings.size()) return "";
+		if (1 == inputStrings.size() && inputStrings.get(0).equals(inputExit)) {
 			return inputStrings.get(0);
 		}
 		CLICommand command = commands.get(inputStrings.get(0));
 		if (null == command) {
 			return inputStrings.get(0) + ": no such command.";
 		}
-		command.argsSet(inputStrings.remove());
+		inputStrings.removeFirst();
+		command.argsSet(inputStrings);
 		return command.execute(this);
 	}
 	public CLICommand addCommand(String name, CLICommand command) {
