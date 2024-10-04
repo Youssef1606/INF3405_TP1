@@ -48,7 +48,6 @@ public class ClientHandler extends Thread {
 		CLIApp app = new CLIApp(in,out);
 		app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
 		
-		
 		while(!Message_From_Client.equals("quit")) {
 
 			

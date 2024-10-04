@@ -21,7 +21,7 @@ public class CLIApp {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private HashMap<String, CLICommand> commands;
-	final private String inputExit = "exit";
+	final private String inputExit = "quit";
 	public CLIApp(DataInputStream in, DataOutputStream out) {
 		this.in = in;
 		this.out = out;
@@ -33,6 +33,7 @@ public class CLIApp {
 		this.addCommand("cd", new CLICommandCd());
 		this.addCommand("upload", new CLICommandUpload());
 		//this.addCommand("download", new CLICommandDownload());
+		this.addCommand("delete", new CLICommandDelete());
         this.cdSet(System.getProperty("user.dir"));
 	}
 	public ArrayList<String> argsExtract(String input) {
