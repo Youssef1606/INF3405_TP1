@@ -3,6 +3,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CLICommandUpload extends CLICommand {
+
+	// TODO: changer ça dépendemment de l'ordinateur utilisé
+	private final String directorySeparator = "/";
+
 	@Override public String execute(CLIApp app) {
 		String fileName = argGet(0);
 		//Integer fileLength = ToInteger(argGet(1));
@@ -11,8 +15,8 @@ public class CLICommandUpload extends CLICommand {
 		//Etape 1 : verifier si on peut récuperer
 		try {
 			
-			File Nvfile = new File(app.cdGet() + "\\" + fileName);
-			System.out.println(app.cdGet()+ "\\" + fileName);
+			File Nvfile = new File(app.cdGet() + directorySeparator + fileName);
+			System.out.println(app.cdGet()+ directorySeparator + fileName);
 			Long fileSize = app.getIn().readLong();
 			
 			try (FileOutputStream fileOut = new FileOutputStream(Nvfile)) {

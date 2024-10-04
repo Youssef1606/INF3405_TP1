@@ -35,7 +35,7 @@ public class CLIApp {
 		//this.addCommand("download", new CLICommandDownload());
         this.cdSet(System.getProperty("user.dir"));
 	}
-	public static ArrayList<String> argsExtract(String input) {
+	public ArrayList<String> argsExtract(String input) {
 		ArrayList<String> inputStrings = new ArrayList<String>();
 		Matcher matcher = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
 		while (matcher.find())
