@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 
 public class ClientHandler extends Thread {
 	private int Client;
@@ -41,27 +42,45 @@ public class ClientHandler extends Thread {
 		
 	}
 	
-	public static void Receive_Commande(DataInputStream in, DataOutputStream out) throws IOException {
+	@SuppressWarnings("deprecation")
+	public void Receive_Commande(DataInputStream in, DataOutputStream out) throws IOException {
 		// fonction qui recois les commande du client et lance les procédure nécessaire
 		String Message_From_Client = "";
 		String Message_To_Client = "";
 		CLIApp app = new CLIApp(in,out);
 		app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
 		
-		while(!Message_From_Client.equals("quit")) {
+		while(!Message_From_Client.equals("exit")) {
 
 			
 			
 			/// Affichage comme dans le TP
 			out.writeUTF(app.promptGet());
 			Message_From_Client = in.readUTF();
-			System.out.println(Message_From_Client);
-			out.writeUTF(app.inputCommand(Message_From_Client));
 			
+			ShowClientInput(Message_From_Client);
+			
+			if(!Message_From_Client.equals("exit")) {
+				out.writeUTF(app.inputCommand(Message_From_Client));
+			}
 			
 			
 			//executer des méthodes avec la commande reçue et envoyé un message au client pour lui dire quoi faire
-			// A SUPPR => Afficher les infos du clients comme sur le tp
+			
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private void ShowClientInput(String message_From_Client) {
+		Date date = new Date();
+		Integer Year = date.getYear() + 1900;
+		Integer Mounth = date.getMonth() +1 ;
+		
+		
+		
+ 		String ClientIp = socket.getInetAddress().toString().substring(1);
+		
+		System.out.println("[" + ClientIp + ":" + socket.getLocalPort()+ " - " + Year + '-' + Mounth + '-' + date.getDate() +'@'+ date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + "]: " + message_From_Client);
+		
 	}
 }

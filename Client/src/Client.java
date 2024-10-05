@@ -54,12 +54,14 @@ public class Client {
 		String Message_To_Serv = ""; //message a envoyé au serveur
 		String Message_From_Serv=""; //message reçue par le serveur
 		String Prompt = "";
+		Boolean Want_To_Exit = false;
+		
 		//Méthode qui envoie et gères les actions que veut effectuer le client
 		// Pour cela, le client envoie un message au serveur et le serveur enverra en retour un message au client lui indiquant quel méthode utiliser
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream()); //création canal d'envoie 
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		Scanner scan = new Scanner(System.in);
-		while(!Message_To_Serv.equals("quit")) {
+		while(!Want_To_Exit) {
 			//recevoir prompt du serveur
 			Prompt = in.readUTF();
 			System.out.print(Prompt);
@@ -72,6 +74,9 @@ public class Client {
 			}
 			else if(Message_To_Serv.startsWith("download")) {
 				DownloadCommand(Message_To_Serv, out, in);
+			}
+			else if(Message_To_Serv.equals("exit")) {
+				Want_To_Exit = true;
 			}
 			else {
 				out.writeUTF(Message_To_Serv);
