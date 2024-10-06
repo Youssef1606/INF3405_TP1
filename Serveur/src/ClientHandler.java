@@ -48,11 +48,12 @@ public class ClientHandler extends Thread {
 		String Message_From_Client = "";
 		String Message_To_Client = "";
 		CLIApp app = new CLIApp(in,out);
-		app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
+		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
+		
+		// obtenir le chemin absolu où se trouve le Serveur
+		app.cdSet(System.getProperty("user.dir"));
 		
 		while(!Message_From_Client.equals("exit")) {
-
-			
 			
 			/// Affichage comme dans le TP
 			out.writeUTF(app.promptGet());

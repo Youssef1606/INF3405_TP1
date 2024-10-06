@@ -51,8 +51,8 @@ public class Client {
 	
 	
 	public static void Run(Socket socket) throws IOException {
-		String Message_To_Serv = ""; //message a envoyé au serveur
-		String Message_From_Serv=""; //message reçue par le serveur
+		String messageToServer = ""; //message a envoyé au serveur
+		String messageFromServer=""; //message reçue par le serveur
 		String Prompt = "";
 		Boolean Want_To_Exit = false;
 		
@@ -65,24 +65,26 @@ public class Client {
 			//recevoir prompt du serveur
 			Prompt = in.readUTF();
 			System.out.print(Prompt);
-			Message_To_Serv = scan.nextLine();
+			messageToServer = scan.nextLine();
 			
-			if(Message_To_Serv.startsWith("upload")) {
-				UploadCommand(Message_To_Serv, out, in);
-				Message_From_Serv = in.readUTF();
-				System.out.println(Message_From_Serv);
+			if(messageToServer.startsWith("upload")) {
+				UploadCommand(messageToServer, out, in);
+				messageFromServer = in.readUTF();
+				System.out.println(messageFromServer);
 			}
-			else if(Message_To_Serv.startsWith("download")) {
-				DownloadCommand(Message_To_Serv, out, in);
+			else if(messageToServer.startsWith("download")) {
+				DownloadCommand(messageToServer, out, in);
+				messageFromServer = in.readUTF();
+				System.out.println(messageFromServer);
 			}
-			else if(Message_To_Serv.equals("exit")) {
+			else if(messageToServer.equals("exit")) {
 				Want_To_Exit = true;
 			}
 			else {
-				out.writeUTF(Message_To_Serv);
+				out.writeUTF(messageToServer);
 				//Attente de la réponse du serveur
-				Message_From_Serv = in.readUTF();
-				System.out.println(Message_From_Serv);
+				messageFromServer = in.readUTF();
+				System.out.println(messageFromServer);
 			}
 		}
 		scan.close();
@@ -104,29 +106,12 @@ public class Client {
 		
 		return inputStrings;
 	}
-	
-	private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
-		ArrayList<String> Tab_Message = argsExtract(Message);
-		
-		String Name_File = Tab_Message.get(1);
-		File file = new File(Name_File);
-
-		if (!file.isFile()) {
-			System.out.println("Le fichier entré n'est pas valide.");
-		}
-		else {
-			out.writeUTF("download "+ file.getName());
-			receiveFile(file, in);
-		}
-	}
-	
-
 
 	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
 		ArrayList<String> Tab_Message = argsExtract(Message);
 		
-		String Name_File = Tab_Message.get(1);
-		File file = new File(Name_File);
+		String fileName = Tab_Message.get(1);
+		File file = new File(fileName);
 		
 		if (!file.isFile()) {
 			System.out.println("Le fichier entré n'est pas valide.");
@@ -134,88 +119,88 @@ public class Client {
 		else {
 			out.writeUTF("upload \""+ file.getName() + "\"");	
 			out.writeLong(file.length());
-			sendFile(file,out);
+			
+			// send a file
+			try (FileInputStream fileIn = new FileInputStream(file)) {
+	            byte[] buffer = new byte[4096];
+	            int bytesRead;
+	            while ((bytesRead = fileIn.read(buffer)) != -1) {
+	                out.write(buffer, 0, bytesRead);
+	            }
+	        }
 		}
+	}
+	
+	private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
+		ArrayList<String> Tab_Message = argsExtract(Message);
 		
-	}
-	
-	private static void sendFile(File file, DataOutputStream out) throws FileNotFoundException, IOException {
-		try (FileInputStream fileIn = new FileInputStream(file)) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = fileIn.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
-            }
-        }
-	}
-	
-	private static void receiveFile(File file, DataInputStream in) throws FileNotFoundException, IOException {
+		String fileName = Tab_Message.get(1);
+		File file = new File(fileName);
+		out.writeUTF("download \""+ file.getName() + "\"");
+		
+		// receive a file
 		try (FileOutputStream fileOut = new FileOutputStream(file)) {
-			// long fileLength = in.readLong(); // TODO utiliser longueur du fichier
-			byte[] buffer = new byte[4096];
-			int bytesRead;
-			while ((bytesRead = in.read(buffer)) != -1) {
-				fileOut.write(buffer, 0, bytesRead); // on écrit les bytes reçus dans le fichier
-			}
+            byte[] buffer = new byte[4096];
+            long bytesReceived = 0;
+            int bytesRead;
+            
+            // TODO: erreur java.io.DataInputStream.readUnsignedShort ici
+            long fileSize = in.readLong();
+            
+            while (bytesReceived < fileSize && (bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
+                fileOut.write(buffer, 0, bytesRead);
+                bytesReceived += bytesRead;
+            }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	public static void Execute_Commande(String Commande) {
-		System.out.println(Commande); //Test pour le developement si le serveur comunique
+	public static void ExecuteCommand(String command) {
+		System.out.println(command); //Test pour le developement si le serveur comunique
 	}
 	
  	public static String IP_Read(Scanner scan) {
-		//Fonction qui demande a l'utilisateur d'entrer une IP, elle verifie de plus que l'IP est correct
+		String IPAddress = "";
+		Boolean IPAddressIsCorrect = false;
 		
-		String Result="";
-		Boolean IP_correct = false;
-		
-		
-		while (!(IP_correct)) { // on redemande une IP au client tant qu'il n'en rentre une qui n'est pas valide
-			
-			Result = scan.nextLine();  //lecture de l'entrée du client
-			//System.out.println(IP); // test de lecture de l'IP
-			IP_correct = Is_IP_Correct(Result);  //verification de l'IP
-			if(!(IP_correct)) {
+		while (!(IPAddressIsCorrect)) {
+			IPAddress = scan.nextLine();
+			IPAddressIsCorrect = isIPAddress(IPAddress);  //verification de l'IP
+			if(!(IPAddressIsCorrect)) {
 				System.out.println("Entrée une nouvelle IP s.v.p :");
 			}
 		}
-		
-		return Result;
+		return IPAddress;
 	}
 	
-	
+ 	// Fonction qui demande a l'utilisateur de rentrer un port et il vérifie s'il est correct
 	public static int Port_Read(Scanner scan) {
-		// Fonction qui demande a l'utilisateur de rentrer un port et il vérifie s'il est correct
+		Boolean portNumIsCorrect = false;
+		int portNum = 0;
 		
-		int Result = 0;
-		Boolean Port_correct = false;
-		String S_Port;
-		
-		
-		System.out.println("Entrez un port entre 5000 et 5050");
-		
-		while(!(Port_correct)) {
-			S_Port = scan.nextLine();  //lecture de l'entrée du client
+		while(!(portNumIsCorrect)) {
+			System.out.println("Entrez un port entre 5000 et 5050");
+			String input = scan.nextLine();
 			try {
-				Result = Integer.valueOf(S_Port);
-				Port_correct = Is_Port_Correct(Result);  //verification du port
-				if(!(Port_correct)) {
-					System.out.println("Entrée un nouveau port s.v.p :");
+				portNum = Integer.valueOf(input);
+				portNumIsCorrect = isValidPortNum(portNum);
+				if (!portNumIsCorrect) {
+					System.out.println("Entrez un port entre 5000 et 5050");
 				}
 			}
 			catch(NumberFormatException e) {
-				System.out.println("Veuillez rentre un entier");
+				System.out.println("Veuillez entrez un entier.");
 			}
 		}
-		
-		return Result;
+		return portNum;
 	}
 	
-	public static Boolean Is_IP_Correct(String IP) {
-		/*	Fonction qui renvoie si  le string envoyé représente une IP valide		 * 
-		 * 
-		 */
+	/*	Fonction qui renvoie si  le string envoyé représente une IP valide		 * 
+	 * 
+	 */
+	public static Boolean isIPAddress(String IP) {
 		Boolean result = false;
 		// Verification si l'entrée est l'IP local
 		if(IP.equals("localhost")) {
@@ -266,10 +251,8 @@ public class Client {
 		return result;
 	}
 	
-	
-	public static Boolean Is_Port_Correct(int Port) {
-		// renvoie true si le port remplie les conditions des ports (être entre 5000 et 5050)
-		return (Port <= 5050 && Port >= 5000);
+	// renvoie true si le port remplie les conditions des ports (être entre 5000 et 5050)
+	public static Boolean isValidPortNum(int portNum) {
+		return (portNum <= 5050 && portNum >= 5000);
 	}
-
 }
