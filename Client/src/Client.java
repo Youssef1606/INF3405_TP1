@@ -180,8 +180,9 @@ public class Client {
 		Boolean portNumIsCorrect = false;
 		int portNum = 0;
 		
+		System.out.println("Entrez un port entre 5000 et 5050");
+		
 		while(!(portNumIsCorrect)) {
-			System.out.println("Entrez un port entre 5000 et 5050");
 			String input = scan.nextLine();
 			try {
 				portNum = Integer.valueOf(input);
