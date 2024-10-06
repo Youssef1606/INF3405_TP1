@@ -187,7 +187,7 @@ public class Client {
 				portNum = Integer.valueOf(input);
 				portNumIsCorrect = isValidPortNum(portNum);
 				if (!portNumIsCorrect) {
-					System.out.println("Entrez un port entre 5000 et 5050");
+					System.out.println("Le port doit être entre 5000 et 5050");
 				}
 			}
 			catch(NumberFormatException e) {

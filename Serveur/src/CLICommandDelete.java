@@ -9,6 +9,12 @@ public class CLICommandDelete extends CLICommand {
 		File fileToDelete = new File(app.cdGet() + directorySeparator + fileName);
 		
 		// TODO: delete folders with files inside
+		
+		// if isFile() ... fichier ... supprimé!
+		
+		// if isDirectory() ... dossier ... supprimé!
+		
+		
 		if (!(fileToDelete.isFile()) && !(fileToDelete.isDirectory())) {
 			return fileName + " is not a directory.";
 		}
