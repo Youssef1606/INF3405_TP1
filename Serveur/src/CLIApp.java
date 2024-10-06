@@ -21,7 +21,6 @@ public class CLIApp {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private HashMap<String, CLICommand> commands;
-	final private String inputExit = "quit";
 	public CLIApp(DataInputStream in, DataOutputStream out) {
 		this.in = in;
 		this.out = out;
@@ -54,9 +53,6 @@ public class CLIApp {
 	public String inputCommand(String input) throws IOException {
 		ArrayList<String> inputStrings = argsExtract(input);
 		if (0 == inputStrings.size()) return "";
-		if (1 == inputStrings.size() && inputStrings.get(0).equals(inputExit)) {
-			return inputStrings.get(0);
-		}
 		CLICommand command = commands.get(inputStrings.get(0));
 		if (null == command) {
 			return inputStrings.get(0) + ": no such command.";
