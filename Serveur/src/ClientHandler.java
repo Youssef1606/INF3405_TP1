@@ -42,12 +42,8 @@ public class ClientHandler extends Thread {
 		
 	}
 
-if (!Message_From_Client.equals("exit")) {
-    String response = app.inputCommand(Message_From_Client);
-    if (response != null && !response.isEmpty()) {
-        out.writeUTF(response);
-    }
- }
+
+ 
 
 	
 	@SuppressWarnings("deprecation")
@@ -61,23 +57,26 @@ if (!Message_From_Client.equals("exit")) {
 		// obtenir le chemin absolu où se trouve le Serveur
 		app.cdSet(System.getProperty("user.dir"));
 		
-		while(!Message_From_Client.equals("exit")) {
-			
-			/// Affichage comme dans le TP
-			out.writeUTF(app.promptGet());
-			Message_From_Client = in.readUTF();
-			
-			ShowClientInput(Message_From_Client);
-			
-			if(!Message_From_Client.equals("exit")) {
-				out.writeUTF(app.inputCommand(Message_From_Client));
-			}
-			
-			
-			//executer des méthodes avec la commande reçue et envoyé un message au client pour lui dire quoi faire
-			
-		}
-	}
+    try {
+        while (!messageFromClient.equalsIgnoreCase("exit")) {
+            // Affichage du prompt
+            out.writeUTF(app.promptGet());
+            messageFromClient = in.readUTF();
+
+            showClientInput(messageFromClient);
+
+            if (!messageFromClient.equalsIgnoreCase("exit")) {
+                String response = app.inputCommand(messageFromClient);
+                // N'envoyez la réponse que si elle n'est pas vide
+                if (response != null && !response.isEmpty()) {
+                    out.writeUTF(response);
+                }
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Connection lost with client #" + clientNumber);
+    }
+}
 
 
 	@SuppressWarnings("deprecation")
