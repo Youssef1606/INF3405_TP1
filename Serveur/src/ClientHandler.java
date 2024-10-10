@@ -37,7 +37,7 @@ public class ClientHandler extends Thread {
 		catch (IOException e) {
 			System.out.println("Couldn't close a socket, what's going on?");
 		}
-		System.out.println("Connection with client# " + Client + " closed");
+		System.out.println("Connection with client #" + Client + " closed");
 		}
 		
 	}
@@ -49,7 +49,7 @@ public class ClientHandler extends Thread {
 	@SuppressWarnings("deprecation")
 	public void Receive_Commande(DataInputStream in, DataOutputStream out) throws IOException {
 		// fonction qui recois les commande du client et lance les procédure nécessaire
-		String Message_From_Client = "";
+		String messageFromClient = "";
 		String Message_To_Client = "";
 		CLIApp app = new CLIApp(in,out);
 		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
@@ -57,39 +57,38 @@ public class ClientHandler extends Thread {
 		// obtenir le chemin absolu où se trouve le Serveur
 		app.cdSet(System.getProperty("user.dir"));
 		
-    try {
-        while (!messageFromClient.equalsIgnoreCase("exit")) {
-            // Affichage du prompt
-            out.writeUTF(app.promptGet());
-            messageFromClient = in.readUTF();
-
-            showClientInput(messageFromClient);
-
-            if (!messageFromClient.equalsIgnoreCase("exit")) {
-                String response = app.inputCommand(messageFromClient);
-                // N'envoyez la réponse que si elle n'est pas vide
-                if (response != null && !response.isEmpty()) {
-                    out.writeUTF(response);
-                }
-            }
-        }
-    } catch (IOException e) {
-        System.out.println("Connection lost with client #" + clientNumber);
-    }
-}
+	    try {
+	        while (!messageFromClient.equalsIgnoreCase("exit")) {
+	            // Affichage du prompt
+	            out.writeUTF(app.promptGet());
+	            messageFromClient = in.readUTF();
+	
+	            showClientInput(messageFromClient);
+	
+	            if (!messageFromClient.equalsIgnoreCase("exit")) {
+	                String response = app.inputCommand(messageFromClient);
+	                // N'envoyez la réponse que si elle n'est pas vide
+	                if (response != null && !response.isEmpty()) {
+	                    out.writeUTF(response);
+	                }
+	            }
+	        }
+	    } catch (IOException e) {
+	        System.out.println("Connection lost with client #" + this.Client);
+	    }
+	}
 
 
 	@SuppressWarnings("deprecation")
-	private void ShowClientInput(String message_From_Client) {
+	private void showClientInput(String messageFromClient) {
 		Date date = new Date();
 		Integer Year = date.getYear() + 1900;
 		Integer Mounth = date.getMonth() +1 ;
 		
 		
-		
  		String ClientIp = socket.getInetAddress().toString().substring(1);
 		
-		System.out.println("[" + ClientIp + ":" + socket.getLocalPort()+ " - " + Year + '-' + Mounth + '-' + date.getDate() +'@'+ date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + "]: " + message_From_Client);
+		System.out.println("[" + ClientIp + ":" + socket.getLocalPort()+ " - " + Year + '-' + Mounth + '-' + date.getDate() +'@'+ date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + "]: " + messageFromClient);
 		
 	}
 }
