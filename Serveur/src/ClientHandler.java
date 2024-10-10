@@ -71,6 +71,15 @@ public class ClientHandler extends Thread {
 		}
 	}
 
+	if (!Message_From_Client.equals("exit")) {
+    String response = app.inputCommand(Message_From_Client);
+    // N'envoyez la réponse que si elle n'est pas vide
+    if (response != null && !response.isEmpty()) {
+        out.writeUTF(response);
+    }
+}
+
+
 	@SuppressWarnings("deprecation")
 	private void ShowClientInput(String message_From_Client) {
 		Date date = new Date();
