@@ -132,30 +132,42 @@ public class Client {
 	}
 	
 	private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
-		ArrayList<String> Tab_Message = argsExtract(Message);
-		
-		String fileName = Tab_Message.get(1);
-		File file = new File(fileName);
-		out.writeUTF("download \""+ file.getName() + "\"");
-		
-		// receive a file
-		try (FileOutputStream fileOut = new FileOutputStream(file)) {
-            byte[] buffer = new byte[4096];
-            long bytesReceived = 0;
-            int bytesRead;
-            
-            // TODO: erreur java.io.DataInputStream.readUnsignedShort ici
-            long fileSize = in.readLong();
-            
-            while (bytesReceived < fileSize && (bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
-                fileOut.write(buffer, 0, bytesRead);
-                bytesReceived += bytesRead;
-            }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    ArrayList<String> Tab_Message = argsExtract(Message);
+    if (Tab_Message.size() < 2) {
+        System.out.println("Usage: download <nom_du_fichier>");
+        return;
+    }
+
+    String fileName = Tab_Message.get(1);
+    File file = new File(fileName);
+    out.writeUTF("download \""+ file.getName() + "\"");
+    
+    // Lire le code de statut du serveur
+    String status = in.readUTF();
+    if ("ERROR".equals(status)) {
+        String errorMessage = in.readUTF();
+        System.out.println("Erreur du serveur : " + errorMessage);
+        return;
+    } else if (!"OK".equals(status)) {
+        System.out.println("Réponse inattendue du serveur : " + status);
+        return;
+    }
+
+    try (FileOutputStream fileOut = new FileOutputStream(file)) {
+        long fileSize = in.readLong();
+        byte[] buffer = new byte[4096];
+        long bytesReceived = 0;
+        int bytesRead;
+        while (bytesReceived < fileSize && (bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
+            fileOut.write(buffer, 0, bytesRead);
+            bytesReceived += bytesRead;
+        }
+        System.out.println("Download réussi!");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
 	
 	public static void ExecuteCommand(String command) {
 		System.out.println(command); //Test pour le developement si le serveur comunique
