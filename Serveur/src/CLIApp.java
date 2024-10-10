@@ -31,7 +31,7 @@ public class CLIApp {
 		this.addCommand("ls", new CLICommandLs());
 		this.addCommand("cd", new CLICommandCd());
 		this.addCommand("upload", new CLICommandUpload());
-		//this.addCommand("download", new CLICommandDownload());
+		this.addCommand("download", new CLICommandDownload());
 		this.addCommand("delete", new CLICommandDelete());
         this.cdSet(System.getProperty("user.dir"));
 	}
