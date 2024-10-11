@@ -23,7 +23,7 @@ public class Client {
 		Scanner scan = new Scanner(System.in);
 	
 		
-		System.out.println("Bienvenue dans Conduite, veuiller entrez l'addresse IP du serveur :");
+		System.out.println("Bienvenue dans Conduite, veuillez entrez l'addresse IP du serveur :");
 		
 		
 		//Lecture de l'IP
@@ -183,11 +183,6 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
     // Lire la confirmation du serveur
     String messageFromServer = in.readUTF();
     System.out.println(messageFromServer);
-}
-
-	
-	public static void ExecuteCommand(String command) {
-		System.out.println(command); //Test pour le developement si le serveur comunique
 	}
 	
  	public static String IP_Read(Scanner scan) {
@@ -248,7 +243,6 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
 			}
 			else { //division du string rentré en plusieur string représentant les 4 partie de l'IP
 				String[] IP_split = IP.split("\\.");
-				//System.out.println(IP_split);
 				if(IP_split.length != 4) { //verification du nombre de partie de la division des IP, il doit être égale a 4
 					result = false;
 					System.out.println("L'entré ne correspond pas a une IP (il faut 4 partie séparrer par des points)");
@@ -256,7 +250,6 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
 				else {
 					int number_ok_part = 0; //compte le nombre de partie correct dans l'IP
 					for(String i : IP_split) { // on pourrait faire un while avec un compteur mais le for ne fait 4 boucle donc ce n'est pas très grave
-						//System.out.println(i);
 						try {
 							int j = Integer.parseInt(i);
 							if(j>=0 && j<=255) { // vérifier si la partie vérifier est compris entre 0 et 255
