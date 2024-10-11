@@ -9,18 +9,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class CLICommandDownload extends CLICommand {
+    @Override
     public String execute(CLIApp app) throws IOException {
         DataOutputStream out = app.getOut();
-        File file = new File(app.cdGet(), argGet(0));
+        String fileName = argGet(0);
+        File file = new File(app.cdGet(), fileName);
+
         if (!file.isFile()) {
-            // Envoyer un code de statut pour indiquer l'échec
             out.writeUTF("ERROR");
-            out.writeUTF("Le fichier entré n'est pas valide.");
-            return ""; // Pas besoin de message supplémentaire
+            out.writeUTF("Le fichier spécifié n'existe pas ou n'est pas un fichier.");
+            return "";
         }
 
-        // Envoyer un code de statut pour indiquer le succès
         out.writeUTF("OK");
+
         try (FileInputStream fileIn = new FileInputStream(file)) {
             out.writeLong(file.length());
             byte[] buffer = new byte[4096];
@@ -29,7 +31,11 @@ public class CLICommandDownload extends CLICommand {
                 out.write(buffer, 0, bytesRead);
             }
         }
-	    // pas de messages supplementaire ici pour eviter une desynchronisation
-        return ""; 
+
+        // Envoyer une confirmation au client
+        out.writeUTF("Download réussi !");
+
+        // Pas besoin de renvoyer un message supplémentaire
+        return "";
     }
 }
