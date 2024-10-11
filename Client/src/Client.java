@@ -63,32 +63,42 @@ public class Client {
 		Scanner scan = new Scanner(System.in);
 		while(!Want_To_Exit) {
 			//recevoir prompt du serveur
-			Prompt = in.readUTF();
-			System.out.print(Prompt);
+			try {
+				Prompt = in.readUTF();
+				System.out.print(Prompt);
+				
+			} catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
 			messageToServer = scan.nextLine();
-			
 			if(messageToServer.startsWith("upload")) {
 				UploadCommand(messageToServer, out, in);
-				messageFromServer = in.readUTF();
-				System.out.println(messageFromServer);
+				try {
+					messageFromServer = in.readUTF();
+					System.out.println(messageFromServer);
+				} catch (IOException ioe) {
+	                ioe.printStackTrace();
+	            }
 			}
 			else if(messageToServer.startsWith("download")) {
 				DownloadCommand(messageToServer, out, in);
-				messageFromServer = in.readUTF();
-				System.out.println(messageFromServer);
 			}
 			else if(messageToServer.equals("exit")) {
 				Want_To_Exit = true;
 			}
 			else {
 				out.writeUTF(messageToServer);
-				//Attente de la réponse du serveur
-				messageFromServer = in.readUTF();
-				System.out.println(messageFromServer);
+				try {
+					messageFromServer = in.readUTF();
+					System.out.println(messageFromServer);
+				} catch (IOException ioe) {
+	                ioe.printStackTrace();
+	            }
 			}
 		}
 		scan.close();
 		socket.close();
+		System.out.println("Vous avez été déconnecté avec succès.");
 	}
 
 	public static ArrayList<String> argsExtract(String input) {
@@ -107,35 +117,41 @@ public class Client {
 		return inputStrings;
 	}
 
-	public static void UploadCommand(String Message,DataOutputStream out,DataInputStream in) throws IOException {
+	public static void UploadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
 		ArrayList<String> Tab_Message = argsExtract(Message);
 		
-		String fileName = Tab_Message.get(1);
+		String fileName = "";
+		if (Tab_Message.size() > 1) fileName = Tab_Message.get(1);
+		
 		File file = new File(fileName);
+		out.writeUTF("upload \""+ file.getName() + "\"");
 		
 		if (!file.isFile()) {
-			System.out.println("Le fichier entré n'est pas valide.");
+			out.writeUTF("ERROR");
+            out.writeUTF("Le fichier spécifié n'existe pas ou n'est pas un fichier.");
+            return;
 		}
-		else {
-			out.writeUTF("upload \""+ file.getName() + "\"");	
-			out.writeLong(file.length());
-			
-			// send a file
-			try (FileInputStream fileIn = new FileInputStream(file)) {
-	            byte[] buffer = new byte[4096];
-	            int bytesRead;
-	            while ((bytesRead = fileIn.read(buffer)) != -1) {
-	                out.write(buffer, 0, bytesRead);
-	            }
-	        }
-		}
+		out.writeUTF("OK");
+		
+		out.writeLong(file.length());
+		
+		// send a file
+		try (FileInputStream fileIn = new FileInputStream(file)) {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = fileIn.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+        }
 	}
 	
 private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
     ArrayList<String> Tab_Message = argsExtract(Message);
 
-    String fileName = Tab_Message.get(1);
-    File file = new File(fileName);
+    String fileName = "";
+	if (Tab_Message.size() > 1) fileName = Tab_Message.get(1);
+
+	File file = new File(fileName);
     out.writeUTF("download \""+ file.getName() + "\"");
 
     // Lire le code de statut du serveur
@@ -150,7 +166,7 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
         System.out.println("Réponse inattendue du serveur : " + status);
         return;
     }
-
+    
     // Recevoir le fichier
     try (FileOutputStream fileOut = new FileOutputStream(file)) {
         long fileSize = in.readLong();

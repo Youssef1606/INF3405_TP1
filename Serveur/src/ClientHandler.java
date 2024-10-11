@@ -48,18 +48,14 @@ public class ClientHandler extends Thread {
 	
 	@SuppressWarnings("deprecation")
 	public void Receive_Commande(DataInputStream in, DataOutputStream out) throws IOException {
-		// fonction qui recois les commande du client et lance les procédure nécessaire
 		String messageFromClient = "";
-		String Message_To_Client = "";
-		CLIApp app = new CLIApp(in,out);
-		//app.cdSet("C:\\Users\\basti\\OneDrive\\Bureau\\Travail\\A3\\Montreal\\INF3405\\test");
+		String messageToClient = "";
 		
-		// obtenir le chemin absolu où se trouve le Serveur
+		CLIApp app = new CLIApp(in,out);
 		app.cdSet(System.getProperty("user.dir"));
 		
 	    try {
 	        while (!messageFromClient.equalsIgnoreCase("exit")) {
-	            // Affichage du prompt
 	            out.writeUTF(app.promptGet());
 	            messageFromClient = in.readUTF();
 	

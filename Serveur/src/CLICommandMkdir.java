@@ -3,7 +3,7 @@ import java.io.File;
 public class CLICommandMkdir extends CLICommand {
 	@Override public String execute(CLIApp app) {
 	    if (argIsEmpty(0)) {
-	    	return "Please specify a directory.";
+	    	return "Spécifiez un dossier.";
 	    }
 	    String directoryName = argGet(0);
 	    if (directoryName.charAt(0) != '/') directoryName = "/" + directoryName;
@@ -12,9 +12,9 @@ public class CLICommandMkdir extends CLICommand {
 	    File directory = new File(fullDirectoryName);
 	    if (!directory.exists()){
 	        directory.mkdirs();
+	        return "Le dossier " + directoryName + " a été créé.";
 	    }
 	    // fin du code tiré de [1]
-	    else return "Directory " + fullDirectoryName + " already exists.";
-	    return "";
+	    return "Le dossier " + fullDirectoryName + " existe déjà.";
 	}
 }

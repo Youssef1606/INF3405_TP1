@@ -14,13 +14,13 @@ public class CLICommandDownload extends CLICommand {
         DataOutputStream out = app.getOut();
         String fileName = argGet(0);
         File file = new File(app.cdGet(), fileName);
-
+        
         if (!file.isFile()) {
             out.writeUTF("ERROR");
             out.writeUTF("Le fichier spécifié n'existe pas ou n'est pas un fichier.");
             return "";
         }
-
+        
         out.writeUTF("OK");
 
         try (FileInputStream fileIn = new FileInputStream(file)) {
@@ -32,10 +32,6 @@ public class CLICommandDownload extends CLICommand {
             }
         }
 
-        // Envoyer une confirmation au client
-        out.writeUTF("Download réussi !");
-
-        // Pas besoin de renvoyer un message supplémentaire
-        return "";
+        return "Le fichier " + fileName + " a bien été téléchargé.";
     }
 }

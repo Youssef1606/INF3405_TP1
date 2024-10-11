@@ -19,32 +19,27 @@ public class Serveur {
 		int Port = 5000;
 		int clientNumber = 0;
 		
-		
-		// Lecture du Port
-		
-		System.out.println("Entrez un port entre 5000 et 5050");
+		System.out.println("Entrez un port entre 5000 et 5050:");
 		
 		while(!(Port_correct)) {
 			S_Port = scan.nextLine();  //lecture de l'entrée du client
 			try {
 				Port = Integer.valueOf(S_Port);
-				Port_correct = Is_Port_Correct(Port);  //verification du port
+				Port_correct = portIsValid(Port);  //verification du port
 				if(!(Port_correct)) {
-					System.out.println("Entrée un nouveau port s.v.p :");
+					System.out.println("Entrez un port entre 5000 et 5050:");
 				}
 			}
 			catch(NumberFormatException e) {
-				System.out.println("Veuillez rentre un entier");
+				System.out.println("Veuillez entrer un entier:");
 			}
 		}
 		scan.close();
 		
-		//Création du socket de conexion
 		Listener = new ServerSocket();
 		Listener.setReuseAddress(true);
 		
 		InetAddress serverIP = InetAddress.getByName(serverAddress);
-		
 		
 		Listener.bind(new InetSocketAddress(serverIP, Port));
 		System.out.format("The server is running on %s:%d%n", serverAddress, Port);
@@ -54,8 +49,6 @@ public class Serveur {
 			while (true) {
 				//Attente de la conexion d'un nouveau client
 				new ClientHandler(Listener.accept(), clientNumber++).start();
-				
-				
 			}
 		} finally {
 			// Fermeture de la connexion
@@ -63,8 +56,7 @@ public class Serveur {
 		}
 	}
 	
-	public static Boolean Is_Port_Correct(int Port) {
-		// renvoie true si le port remplie les conditions des ports (être entre 5000 et 5050)
+	public static Boolean portIsValid(int Port) {
 		return (Port <= 5050 && Port >= 5000);
 	}
 

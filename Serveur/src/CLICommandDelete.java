@@ -15,10 +15,14 @@ public class CLICommandDelete extends CLICommand {
 		File fileToDelete = new File(app.cdGet() + directorySeparator + fileName);
 		boolean isFile = fileToDelete.isFile();
 		
+		if (!isFile && !fileToDelete.isDirectory()) {
+			return "Le dossier spécifié n'existe pas.";
+		}
+		
 		Path pathToDelete = fileToDelete.toPath();
 		
+		// source du code [1] : https://stackoverflow.com/questions/779519/delete-directories-recursively-in-java
 		try {
-			// source du code [1] : https://stackoverflow.com/questions/779519/delete-directories-recursively-in-java
 			Files.walkFileTree(pathToDelete, new SimpleFileVisitor<Path>() {
 				   @Override
 				   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -32,17 +36,16 @@ public class CLICommandDelete extends CLICommand {
 				       return FileVisitResult.CONTINUE;
 				   }
 			});
-			// fin du code de [1]
 		} catch (IOException e) {
 			e.printStackTrace();
-			return fileName + " is not a directory.";
 		}
+		// fin du code de [1]
 		
 		if (isFile) {
-			return "Fichier " + fileName + " supprimé!";
+			return "Le fichier " + fileName + " a bien été supprimé.";
 		}
 		else {
-			return "Dossier " + fileName + " supprimé!";
+			return "Le dossier " + fileName + " a bien été supprimé.";
 		}
 	}
 }

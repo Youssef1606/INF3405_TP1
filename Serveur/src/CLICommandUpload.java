@@ -3,20 +3,38 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CLICommandUpload extends CLICommand {
-
-	// TODO: changer ça dépendemment de l'ordinateur utilisé
+	
 	private final String directorySeparator = "/";
 
 	@Override public String execute(CLIApp app) {
 		String fileName = argGet(0);
-		//Integer fileLength = ToInteger(argGet(1));
+		
+		String status;
+		try {
+			status = app.getIn().readUTF();
+			if ("ERROR".equals(status)) {
+		        // Le client a indiqué une erreur
+		        String errorMessage = app.getIn().readUTF();
+		        System.out.println("Erreur du client : " + errorMessage);
+		        app.getOut().writeUTF("Erreur du client : " + errorMessage);
+		        return "";
+		    } else if (!"OK".equals(status)) {
+		        // Réponse inattendue du client
+		        System.out.println("Réponse inattendue du client : " + status);
+		        app.getOut().writeUTF("Réponse inattendue du client : " + status);
+		        return "";
+		    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		// reconstituer le fichier à partir d'octets
 		
 		//Etape 1 : verifier si on peut récuperer
 		try {
-			
 			File Nvfile = new File(app.cdGet() + directorySeparator + fileName);
 			System.out.println(app.cdGet()+ directorySeparator + fileName);
+			
 			Long fileSize = app.getIn().readLong();
 			
 			try (FileOutputStream fileOut = new FileOutputStream(Nvfile)) {
@@ -30,9 +48,8 @@ public class CLICommandUpload extends CLICommand {
 	            }
 	        }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "Upload réussi !";
+		return "Le fichier " + fileName + " a bien été téléversé.";
 	}
 }

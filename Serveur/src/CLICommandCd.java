@@ -3,9 +3,9 @@ public class CLICommandCd extends CLICommand {
 	
 	@Override public String execute(CLIApp app) {
         if (argIsEmpty(0)) {
-            return "Usage: cd <répertoire>";
+            return "Veuillez spécifier un dossier.";
         }
-
+        
         String target = argGet(0);
         String currentPath = app.cdGet();
         File newDirectory;
@@ -36,11 +36,9 @@ public class CLICommandCd extends CLICommand {
                 return "Le répertoire spécifié n'existe pas.";
             }
         }
-
         // Mettre à jour le répertoire courant
         app.cdSet(newDirectory.getAbsolutePath());
-
-        return "";
+        return "Vous êtes dans le dossier " + target + ".";
     }
 }
 

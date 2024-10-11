@@ -14,15 +14,15 @@ public class CLICommandLs extends CLICommand{
 			
 			for(int i = 0; i < files.length ; i++) {
 				if (files[i].isFile()) {
-					result += ANSI_BLUE + files[i].getName() + ANSI_RESET + "\n";
+					result += ANSI_BLUE + "[File] " + files[i].getName() + ANSI_RESET + "\n";
 				}
 				else if(files[i].isDirectory()){
-					result += ANSI_GREEN + files[i].getName() + ANSI_RESET + "\n";
+					result += ANSI_GREEN + "[Folder] " + files[i].getName() + ANSI_RESET + "\n";
 				}
 			}
 		}
 		else {
-			result = "Vous ne vous trouvez pas dans un repertoire";
+			result = "Vous ne vous trouvez pas dans un repertoire.";
 		}
 		return result;
 	}
