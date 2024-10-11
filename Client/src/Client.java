@@ -131,41 +131,43 @@ public class Client {
 		}
 	}
 	
-	private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
+private static void DownloadCommand(String Message, DataOutputStream out, DataInputStream in) throws IOException {
     ArrayList<String> Tab_Message = argsExtract(Message);
-    if (Tab_Message.size() < 2) {
-        System.out.println("Usage: download <nom_du_fichier>");
-        return;
-    }
 
     String fileName = Tab_Message.get(1);
     File file = new File(fileName);
     out.writeUTF("download \""+ file.getName() + "\"");
-    
+
     // Lire le code de statut du serveur
     String status = in.readUTF();
     if ("ERROR".equals(status)) {
+        // Le serveur a indiqué une erreur
         String errorMessage = in.readUTF();
         System.out.println("Erreur du serveur : " + errorMessage);
         return;
     } else if (!"OK".equals(status)) {
+        // Réponse inattendue du serveur
         System.out.println("Réponse inattendue du serveur : " + status);
         return;
     }
 
+    // Recevoir le fichier
     try (FileOutputStream fileOut = new FileOutputStream(file)) {
         long fileSize = in.readLong();
         byte[] buffer = new byte[4096];
         long bytesReceived = 0;
         int bytesRead;
-        while (bytesReceived < fileSize && (bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
+
+        while (bytesReceived < fileSize && (bytesRead = in.read(buffer, 0, 
+                (int)Math.min(buffer.length, fileSize - bytesReceived))) != -1) {
             fileOut.write(buffer, 0, bytesRead);
             bytesReceived += bytesRead;
         }
-        System.out.println("Download réussi!");
-    } catch (IOException e) {
-        e.printStackTrace();
     }
+
+    // Lire la confirmation du serveur
+    String messageFromServer = in.readUTF();
+    System.out.println(messageFromServer);
 }
 
 	
