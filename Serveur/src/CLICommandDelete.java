@@ -10,7 +10,7 @@ public class CLICommandDelete extends CLICommand {
 	
 	@Override public String execute(CLIApp app) {
 		String fileName = argGet(0);
-		File fileToDelete = new File(app.cdGet() + "\\" + fileName);
+		File fileToDelete = new File(app.cdGet() + File.separator + fileName);
 		boolean isFile = fileToDelete.isFile();
 		
 		if (!isFile && !fileToDelete.isDirectory()) {

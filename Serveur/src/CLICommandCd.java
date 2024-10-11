@@ -23,7 +23,7 @@ public class CLICommandCd extends CLICommand {
         } else {
             // Se déplacer vers un répertoire enfant ou absolu
             File potentialDir;
-            if (target.startsWith(File.separator) || target.startsWith("\\")) {
+            if (target.startsWith(File.separator)) {
                 // Chemin absolu
                 potentialDir = new File(target);
             } else {
