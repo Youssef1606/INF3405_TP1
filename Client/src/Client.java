@@ -66,7 +66,6 @@ public class Client {
 			Prompt = in.readUTF();
 			System.out.print(Prompt);
 			messageToServer = scan.nextLine();
-			out.writeUTF(messageToServer);
 			
 			if(messageToServer.startsWith("upload")) {
 				UploadCommand(messageToServer, out, in);
