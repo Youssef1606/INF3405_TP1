@@ -102,10 +102,12 @@ public class Client {
 
 	public static ArrayList<String> argsExtract(String input) {
 		ArrayList<String> inputStrings = new ArrayList<String>();
+		// source du code [1] : https://stackoverflow.com/questions/366202/regex-for-splitting-a-string-using-space-when-not-surrounded-by-single-or-double
 		Matcher matcher = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
 		while (matcher.find())
 		    inputStrings.add(matcher.group(1));
-
+		// fin du code de [1]
+		
 		for (int i = 0; i < inputStrings.size(); i++) {
 			String arg = inputStrings.get(i);
 			if (arg.charAt(0) == '\"' && 
