@@ -8,11 +8,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class CLICommandDelete extends CLICommand {
 	
-	private final String directorySeparator = "/";
-	
 	@Override public String execute(CLIApp app) {
 		String fileName = argGet(0);
-		File fileToDelete = new File(app.cdGet() + directorySeparator + fileName);
+		File fileToDelete = new File(app.cdGet() + "\\" + fileName);
 		boolean isFile = fileToDelete.isFile();
 		
 		if (!isFile && !fileToDelete.isDirectory()) {
