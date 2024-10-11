@@ -46,10 +46,8 @@ public class ClientHandler extends Thread {
  
 
 	
-	@SuppressWarnings("deprecation")
 	public void Receive_Commande(DataInputStream in, DataOutputStream out) throws IOException {
 		String messageFromClient = "";
-		String messageToClient = "";
 		
 		CLIApp app = new CLIApp(in,out);
 		app.cdSet(System.getProperty("user.dir"));

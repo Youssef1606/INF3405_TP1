@@ -8,7 +8,7 @@ public class CLICommandLs extends CLICommand{
 	
 	@Override public String execute(CLIApp app) {
 		File repertory = new File(app.cdGet());
-		String result = "";
+		String result = "\n";
 		if (repertory.isDirectory()) {
 			File[] files = repertory.listFiles();
 			

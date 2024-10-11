@@ -2,7 +2,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -262,7 +261,6 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
 							int j = Integer.parseInt(i);
 							if(j>=0 && j<=255) { // vérifier si la partie vérifier est compris entre 0 et 255
 								number_ok_part++;
-								
 							}
 							else {
 								System.out.println("les nombres doivent être compris entre 0 et 255");
@@ -273,8 +271,6 @@ private static void DownloadCommand(String Message, DataOutputStream out, DataIn
 						}
 					}
 					result = (number_ok_part == 4); // vérifier si il y a bien 4 partie correct
-					
-					
 				}
 			}
 		}

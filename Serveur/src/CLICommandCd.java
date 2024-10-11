@@ -16,6 +16,7 @@ public class CLICommandCd extends CLICommand {
             File parentDir = currentDir.getParentFile();
             if (parentDir != null && parentDir.exists()) {
                 newDirectory = parentDir;
+                target = parentDir.getName();
             } else {
                 return "Vous êtes déjà dans le répertoire racine.";
             }
