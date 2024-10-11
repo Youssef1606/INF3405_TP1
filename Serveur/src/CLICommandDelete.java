@@ -10,6 +10,11 @@ public class CLICommandDelete extends CLICommand {
 	
 	@Override public String execute(CLIApp app) {
 		String fileName = argGet(0);
+		
+		if (fileName == "") {
+			return "Veuillez spécifier un dossier.";
+		}
+		
 		File fileToDelete = new File(app.cdGet() + File.separator + fileName);
 		boolean isFile = fileToDelete.isFile();
 		
